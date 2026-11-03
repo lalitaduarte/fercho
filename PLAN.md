@@ -143,7 +143,7 @@ Archivos en `public/` (HTML, CSS y JavaScript, sin frameworks):
   detalle de ventas se cortaba en celular.
 - ⏳ Prueba manual de Laura en el navegador.
 
-### Etapa 6 — Publicación en internet ✅ (falta la prueba de persistencia)
+### Etapa 6 — Publicación en internet ✅
 - ✅ Base de datos en Neon, proyecto `fercho`, región AWS US East 1 (N. Virginia).
   Neon la creó con **PostgreSQL 18.6** (no 17); los scripts funcionan igual.
   Las cadenas de conexión están en `.env` como `DATABASE_URL_NUBE` (directa) y `DATABASE_URL_POOLED`.
@@ -161,11 +161,10 @@ Archivos en `public/` (HTML, CSS y JavaScript, sin frameworks):
   Pruebas: API 36/36 y interfaz 26/26.
 - ✅ Contraseñas de admin, mesero1 y cocina1 cambiadas por Laura en la aplicación publicada.
   Verificado en Neon: ninguna coincide ya con la de prueba. Las de prueba siguen solo en la base local.
-- ⏳ Prueba de persistencia: registrar un pedido real en la versión publicada y confirmar que sigue
-  allí después de que Render "duerma" el servidor (15 minutos sin visitas).
-- Configurar en el servidor las variables `DATABASE_URL`, `JWT_SECRET` y `NODE_ENV=production`.
-- **Cambiar las contraseñas de los usuarios de prueba en la aplicación publicada ANTES de compartir el enlace.**
-  Las contraseñas de prueba aparecen en este archivo y en el script 05, y el código está en GitHub.
+- ✅ Prueba de persistencia (3 nov 2026): Laura registró desde el celular el pedido #6 (mesa 1,
+  5 productos, $ 63.000) a las 00:14. A la 1:18, después de que Render durmió el servidor, el pedido
+  seguía en la aplicación. Verificado también en Neon.
+- ✅ Variables configuradas en Render: `DATABASE_URL`, `JWT_SECRET` y `NODE_ENV=production`.
 - Publicar el backend y el frontend con enlace HTTPS.
 - Comprobar que los datos persisten después de reiniciar el servicio.
 
