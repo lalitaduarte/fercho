@@ -150,7 +150,10 @@ Archivos en `public/` (HTML, CSS y JavaScript, sin frameworks):
 - ✅ Ejecutados en la nube `00b_configurar_nube.sql` y los scripts 01 a 05.
   Verificado: zona horaria America/Bogota, pruebas SQL 11/11 OK y API 30/30 OK contra Neon. Quedó sin datos de prueba.
 - ✅ Conexión SSL en modo `verify-full`, que comprueba el certificado del servidor.
-- ⏳ Subir el código a un repositorio en GitHub.
+- ✅ Código en GitHub (privado): https://github.com/lalitaduarte/fercho. Verificado: GitHub tiene
+  la misma versión que el equipo local y no contiene `.env`. Se agregaron `.gitattributes`
+  (finales de línea LF) y `.node-version` (Node 22).
+- ⏳ Crear el servicio web en Render (paso manual).
 - Configurar en el servidor las variables `DATABASE_URL`, `JWT_SECRET` y `NODE_ENV=production`.
 - **Cambiar las contraseñas de los usuarios de prueba en la base de Neon ANTES de compartir el enlace.**
   Las contraseñas de prueba aparecen en este archivo y en el script 05, y el código estará en GitHub.
