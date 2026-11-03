@@ -143,7 +143,7 @@ Archivos en `public/` (HTML, CSS y JavaScript, sin frameworks):
   detalle de ventas se cortaba en celular.
 - ⏳ Prueba manual de Laura en el navegador.
 
-### Etapa 6 — Publicación en internet 🔄
+### Etapa 6 — Publicación en internet ✅ (falta la prueba de persistencia)
 - ✅ Base de datos en Neon, proyecto `fercho`, región AWS US East 1 (N. Virginia).
   Neon la creó con **PostgreSQL 18.6** (no 17); los scripts funcionan igual.
   Las cadenas de conexión están en `.env` como `DATABASE_URL_NUBE` (directa) y `DATABASE_URL_POOLED`.
@@ -159,12 +159,23 @@ Archivos en `public/` (HTML, CSS y JavaScript, sin frameworks):
 - ✅ Nueva pantalla **Cambiar contraseña** (`contrasena.html`, `PATCH /api/auth/contrasena`). Se abre
   pulsando el nombre del usuario en el menú superior. Exige la contraseña actual y un mínimo de 8 caracteres.
   Pruebas: API 36/36 y interfaz 26/26.
-- ⏳ Cambiar las contraseñas de admin, mesero1 y cocina1 en la aplicación publicada (paso manual).
+- ✅ Contraseñas de admin, mesero1 y cocina1 cambiadas por Laura en la aplicación publicada.
+  Verificado en Neon: ninguna coincide ya con la de prueba. Las de prueba siguen solo en la base local.
+- ⏳ Prueba de persistencia: registrar un pedido real en la versión publicada y confirmar que sigue
+  allí después de que Render "duerma" el servidor (15 minutos sin visitas).
 - Configurar en el servidor las variables `DATABASE_URL`, `JWT_SECRET` y `NODE_ENV=production`.
 - **Cambiar las contraseñas de los usuarios de prueba en la aplicación publicada ANTES de compartir el enlace.**
   Las contraseñas de prueba aparecen en este archivo y en el script 05, y el código está en GitHub.
 - Publicar el backend y el frontend con enlace HTTPS.
 - Comprobar que los datos persisten después de reiniciar el servicio.
+
+## Mejoras pendientes (después de publicar)
+
+1. Reemplazar el menú de ejemplo por el menú y los precios reales de Fercho, y confirmar el número de mesas.
+2. Gestión de usuarios desde la aplicación (crear o desactivar personal). Hoy se hace con SQL.
+3. Gestión de categorías y mesas desde la aplicación. Hoy se hace con SQL.
+4. Diagrama entidad-relación para la documentación académica.
+5. Inventario cuantitativo, cuando se definan sus reglas.
 
 ## Decisiones pendientes
 
