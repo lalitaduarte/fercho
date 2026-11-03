@@ -1,0 +1,8 @@
+# Guardar todos los archivos de texto con finales de línea LF (estilo
+# Linux) en el repositorio, sin importar el sistema de quien los edite.
+* text=auto eol=lf
+
+# Archivos binarios: no tocarlos.
+*.png binary
+*.jpg binary
+*.ico binary

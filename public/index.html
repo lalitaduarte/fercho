@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Menú de Hamburguesas y Pinchos Fercho: hamburguesas, pinchos, acompañantes y bebidas.">
+  <title>Menú · Hamburguesas y Pinchos Fercho</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/css/estilos.css">
+</head>
+<body>
+  <header class="barra">
+    <a class="marca" href="/">Hamburguesas y Pinchos <span>Fercho</span></a>
+    <nav class="nav"><a href="/ingresar.html">Ingreso personal</a></nav>
+  </header>
+
+  <section class="portada">
+    <h1>Nuestro <span>menú</span></h1>
+    <p>Precios en pesos colombianos</p>
+  </section>
+
+  <!-- Accesos rápidos a cada categoría (se llenan con JavaScript) -->
+  <nav class="chips" id="chips" aria-label="Categorías"></nav>
+
+  <main class="contenedor" id="menu">
+    <p class="vacio">Cargando el menú…</p>
+  </main>
+
+  <script src="/js/comun.js"></script>
+  <script>
+    // Carga el menú desde la API pública y lo dibuja por categorías.
+    async function cargarMenu() {
+      const menu = document.getElementById('menu');
+      const chips = document.getElementById('chips');
+      try {
+        const categorias = await api('GET', '/api/menu');
+        if (categorias.length === 0) {
+          menu.innerHTML = '<p class="vacio">El menú no está disponible en este momento.</p>';
+          return;
+        }
+        chips.innerHTML = categorias
+          .map((c) => `<a href="#cat-${c.id_categoria}">${esc(c.nombre)}</a>`)
+          .join('');
+        menu.innerHTML = categorias.map((c) => `
+          <section class="categoria" id="cat-${c.id_categoria}">
+            <h2>${esc(c.nombre)}</h2>
+            <div class="rejilla">
+              ${c.productos.map((p) => `
+                <article class="tarjeta producto ${p.disponible ? '' : 'no-disponible'}">
+                  <div>
+                    <div class="nombre">${esc(p.nombre)}</div>
+                    ${p.descripcion ? `<div class="descripcion">${esc(p.descripcion)}</div>` : ''}
+                    ${p.disponible ? '' : '<span class="etiqueta agotado">Agotado</span>'}
+                  </div>
+                  <div class="precio">${pesos(p.precio)}</div>
+                </article>`).join('')}
+            </div>
+          </section>`).join('');
+      } catch (error) {
+        menu.innerHTML = `<p class="vacio">No fue posible cargar el menú. ${esc(error.message)}</p>`;
+      }
+    }
+    cargarMenu();
+  </script>
+</body>
+</html>

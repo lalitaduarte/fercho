@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pedidos · Fercho</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/css/estilos.css">
+</head>
+<body>
+  <header class="barra">
+    <a class="marca" href="/">Hamburguesas y Pinchos <span>Fercho</span></a>
+    <nav class="nav" id="nav"></nav>
+  </header>
+
+  <main class="contenedor">
+    <div class="pestanas" role="tablist">
+      <button type="button" role="tab" data-pestana="seccion-nuevo" aria-selected="true">Nuevo pedido</button>
+      <button type="button" role="tab" data-pestana="seccion-pedidos" aria-selected="false">Pedidos de hoy</button>
+    </div>
+
+    <!-- ===== Nuevo pedido ===== -->
+    <section id="seccion-nuevo">
+      <div class="tarjeta seccion">
+        <div class="fila-campos">
+          <div class="campo">
+            <label for="mesa">Mesa</label>
+            <select id="mesa"></select>
+          </div>
+          <div class="campo">
+            <label for="observaciones">Observaciones del pedido (opcional)</label>
+            <input id="observaciones" maxlength="300" placeholder="Ej.: cliente con prisa">
+          </div>
+        </div>
+      </div>
+
+      <div id="lista-productos"><p class="vacio">Cargando productos…</p></div>
+
+      <div class="resumen-pedido">
+        <div>
+          <div class="texto-suave" id="resumen-cantidad">0 productos</div>
+          <div class="total" id="resumen-total">$ 0</div>
+        </div>
+        <button type="button" class="boton primario" id="boton-registrar" disabled>Registrar pedido</button>
+      </div>
+    </section>
+
+    <!-- ===== Pedidos de hoy ===== -->
+    <section id="seccion-pedidos" hidden>
+      <div class="encabezado-seccion">
+        <h2>Pedidos de hoy y abiertos</h2>
+        <button type="button" class="boton pequeno" id="boton-actualizar">Actualizar</button>
+      </div>
+      <div class="rejilla tres" id="lista-pedidos"><p class="vacio">Cargando…</p></div>
+    </section>
+  </main>
+
+  <!-- Diálogo para registrar el pago -->
+  <dialog id="dialogo-pago">
+    <form method="dialog" id="formulario-pago">
+      <h2 id="pago-titulo">Registrar pago</h2>
+      <p class="total" id="pago-total"></p>
+      <div class="campo">
+        <label for="forma-pago">Forma de pago</label>
+        <select id="forma-pago" required></select>
+      </div>
+      <div class="acciones">
+        <button type="submit" class="boton exito" value="pagar">Confirmar pago</button>
+        <button type="submit" class="boton" value="cancelar" formnovalidate>Volver</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="/js/comun.js"></script>
+  <script src="/js/mesero.js"></script>
+</body>
+</html>

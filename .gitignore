@@ -1,0 +1,10 @@
+# Archivos que NUNCA se suben a GitHub
+
+# Contraseñas y configuración privada
+.env
+
+# Librerías descargadas por npm (se reinstalan con "npm install")
+node_modules/
+
+# Archivos temporales
+*.log

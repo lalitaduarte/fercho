@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cocina · Fercho</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/css/estilos.css">
+</head>
+<body>
+  <header class="barra">
+    <a class="marca" href="/">Hamburguesas y Pinchos <span>Fercho</span></a>
+    <nav class="nav" id="nav"></nav>
+  </header>
+
+  <main class="contenedor">
+    <div class="pestanas" role="tablist">
+      <button type="button" role="tab" data-pestana="seccion-pedidos" aria-selected="true">Pedidos</button>
+      <button type="button" role="tab" data-pestana="seccion-disponibilidad" aria-selected="false">Disponibilidad</button>
+    </div>
+
+    <!-- ===== Pedidos para preparar ===== -->
+    <section id="seccion-pedidos">
+      <div class="encabezado-seccion">
+        <h2>Pedidos en cocina</h2>
+        <span class="texto-suave" id="ultima-actualizacion"></span>
+      </div>
+      <div class="rejilla tres" id="lista-cocina"><p class="vacio">Cargando…</p></div>
+    </section>
+
+    <!-- ===== Disponibilidad de productos ===== -->
+    <section id="seccion-disponibilidad" hidden>
+      <div class="encabezado-seccion">
+        <h2>Disponibilidad de productos</h2>
+      </div>
+      <p class="texto-suave">Desmarque un producto cuando se agote; dejará de poder pedirse y en el menú aparecerá como "Agotado".</p>
+      <div class="tarjeta" id="lista-disponibilidad"><p class="vacio">Cargando…</p></div>
+    </section>
+  </main>
+
+  <script src="/js/comun.js"></script>
+  <script>
+    // Siguiente estado que puede asignar la cocina desde cada estado.
+    const SIGUIENTE = {
+      pendiente: { estado: 'en_preparacion', texto: 'Empezar a preparar', clase: 'primario' },
+      en_preparacion: { estado: 'listo', texto: 'Marcar como listo', clase: 'exito' },
+    };
+
+    function claseTarjeta(p) {
+      if (p.estado_codigo === 'listo') return 'terminado';
+      if (p.estado_codigo === 'en_preparacion') return 'en-curso';
+      return p.minutos_espera >= 15 ? 'urgente' : '';
+    }
+
+    async function cargarCocina() {
+      const contenedor = document.getElementById('lista-cocina');
+      try {
+        const pedidos = await api('GET', '/api/pedidos/cocina');
+        document.getElementById('ultima-actualizacion').textContent =
+          `Actualizado ${hora(new Date())}`;
+        if (pedidos.length === 0) {
+          contenedor.innerHTML = '<p class="vacio">No hay pedidos pendientes.</p>';
+          return;
+        }
+        contenedor.innerHTML = pedidos.map((p) => {
+          const siguiente = SIGUIENTE[p.estado_codigo];
+          return `
+          <article class="tarjeta ${claseTarjeta(p)}" data-id="${p.id_pedido}">
+            <div class="pedido-cabecera">
+              <div>
+                <div class="titulo">#${p.id_pedido} · ${esc(p.mesa)}</div>
+                <div class="pedido-meta">${hora(p.creado_en)} · hace ${p.minutos_espera} min</div>
+              </div>
+              <span class="etiqueta ${p.estado_codigo}">${esc(p.estado)}</span>
+            </div>
+            <div class="lista-productos">${esc(p.productos)}</div>
+            ${p.observaciones ? `<div class="observacion">${esc(p.observaciones)}</div>` : ''}
+            ${siguiente
+              ? `<button type="button" class="boton ${siguiente.clase} bloque" data-estado="${siguiente.estado}">${siguiente.texto}</button>`
+              : '<p class="texto-suave">Esperando que el mesero lo entregue.</p>'}
+          </article>`;
+        }).join('');
+      } catch (error) {
+        aviso(error.message, 'error');
+      }
+    }
+
+    document.getElementById('lista-cocina').addEventListener('click', async (evento) => {
+      const boton = evento.target.closest('button[data-estado]');
+      if (!boton) return;
+      const id = boton.closest('article').dataset.id;
+      boton.disabled = true;
+      try {
+        await api('PATCH', `/api/pedidos/${id}/estado`, { estado: boton.dataset.estado });
+      } catch (error) {
+        aviso(error.message, 'error');
+      }
+      cargarCocina();
+    });
+
+    async function cargarDisponibilidad() {
+      const contenedor = document.getElementById('lista-disponibilidad');
+      const productos = (await api('GET', '/api/productos')).filter((p) => p.activo);
+      contenedor.innerHTML = productos.map((p) => `
+        <div class="linea-producto">
+          <label class="casilla" for="disp-${p.id_producto}">
+            <input type="checkbox" id="disp-${p.id_producto}" data-id="${p.id_producto}" ${p.disponible ? 'checked' : ''}>
+            ${esc(p.nombre)}
+          </label>
+          <span class="texto-suave">${esc(p.categoria)}</span>
+        </div>`).join('');
+    }
+
+    document.getElementById('lista-disponibilidad').addEventListener('change', async (evento) => {
+      const casilla = evento.target;
+      if (!casilla.dataset.id) return;
+      try {
+        const p = await api('PATCH', `/api/productos/${casilla.dataset.id}/disponibilidad`, { disponible: casilla.checked });
+        aviso(`${p.nombre}: ${p.disponible ? 'disponible' : 'agotado'}`, p.disponible ? 'exito' : '');
+      } catch (error) {
+        casilla.checked = !casilla.checked; // deshacer el cambio visual
+        aviso(error.message, 'error');
+      }
+    });
+
+    (async function iniciar() {
+      await exigirSesion(['cocina', 'administrador']);
+      activarPestanas((pestana) => {
+        if (pestana === 'seccion-disponibilidad') cargarDisponibilidad();
+        else cargarCocina();
+      });
+      await cargarCocina();
+      // La pantalla de cocina se actualiza sola cada 10 segundos.
+      setInterval(() => {
+        if (!document.getElementById('seccion-pedidos').hidden) cargarCocina();
+      }, 10000);
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,234 @@
+/* =====================================================================
+   Estilos de Hamburguesas y Pinchos Fercho
+   Diseño "móvil primero": las reglas base son para celular y las
+   consultas @media (min-width) ajustan para pantallas más grandes.
+   Los colores se definen una sola vez como variables (--nombre).
+   ===================================================================== */
+:root {
+  --rojo: #b8321f;
+  --rojo-oscuro: #8f2414;
+  --mostaza: #f2a516;
+  --fondo: #faf6f0;
+  --superficie: #ffffff;
+  --texto: #2b211b;
+  --texto-suave: #6e6259;
+  --borde: #e6dcd0;
+  --verde: #2e7d32;
+  --verde-fondo: #e6f2e6;
+  --gris-fondo: #efebe6;
+  --azul: #1f5fa8;
+  --azul-fondo: #e4eefa;
+  --amarillo-fondo: #fff4d6;
+  --radio: 12px;
+  --sombra: 0 1px 3px rgba(60, 40, 20, 0.12);
+}
+
+* { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size: 16px;
+  line-height: 1.45;
+  color: var(--texto);
+  background: var(--fondo);
+}
+
+h1, h2, h3 { line-height: 1.2; margin: 0 0 0.5em; }
+h1 { font-size: 1.5rem; }
+h2 { font-size: 1.25rem; }
+h3 { font-size: 1.05rem; }
+a { color: var(--rojo); }
+
+/* ---------- Barra superior ---------- */
+.barra {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 10px 16px;
+  background: var(--rojo);
+  color: #fff;
+}
+.marca { color: #fff; text-decoration: none; font-weight: 800; font-size: 1.15rem; letter-spacing: 0.01em; }
+.marca span { color: var(--mostaza); }
+.nav { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
+.nav a, .nav button {
+  color: #fff; text-decoration: none; font: inherit; font-size: 0.9rem;
+  background: transparent; border: 1px solid transparent; border-radius: 8px;
+  padding: 6px 10px; cursor: pointer;
+}
+.nav a:hover, .nav button:hover { background: rgba(255, 255, 255, 0.15); }
+.nav a.activo { border-color: rgba(255, 255, 255, 0.6); }
+.nav .usuario { font-size: 0.85rem; opacity: 0.85; padding: 0 6px; }
+
+/* ---------- Contenedor ---------- */
+.contenedor { max-width: 1100px; margin: 0 auto; padding: 16px; }
+
+/* ---------- Pestañas ---------- */
+.pestanas { display: flex; gap: 6px; margin-bottom: 16px; overflow-x: auto; }
+.pestanas button {
+  flex: 0 0 auto; font: inherit; font-weight: 600; padding: 8px 14px;
+  border: 1px solid var(--borde); border-radius: 999px; background: var(--superficie);
+  color: var(--texto); cursor: pointer;
+}
+.pestanas button[aria-selected="true"] { background: var(--texto); color: #fff; border-color: var(--texto); }
+[hidden] { display: none !important; }
+
+/* ---------- Tarjetas y rejillas ---------- */
+.tarjeta {
+  background: var(--superficie); border: 1px solid var(--borde);
+  border-radius: var(--radio); padding: 14px; box-shadow: var(--sombra);
+}
+.rejilla { display: grid; gap: 12px; grid-template-columns: 1fr; }
+@media (min-width: 640px) { .rejilla { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 960px) { .rejilla.tres { grid-template-columns: repeat(3, 1fr); } }
+
+/* ---------- Botones ---------- */
+.boton {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  font: inherit; font-weight: 600; padding: 9px 16px; min-height: 42px;
+  border-radius: 10px; border: 1px solid var(--borde);
+  background: var(--superficie); color: var(--texto); cursor: pointer; text-decoration: none;
+}
+.boton:hover { filter: brightness(0.96); }
+.boton:disabled { opacity: 0.5; cursor: not-allowed; }
+.boton.primario { background: var(--rojo); border-color: var(--rojo); color: #fff; }
+.boton.exito { background: var(--verde); border-color: var(--verde); color: #fff; }
+.boton.peligro { color: var(--rojo); border-color: var(--rojo); }
+.boton.pequeno { min-height: 34px; padding: 5px 10px; font-size: 0.9rem; }
+.boton.bloque { width: 100%; }
+.acciones { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+
+/* ---------- Formularios ---------- */
+label { display: block; font-weight: 600; font-size: 0.9rem; margin-bottom: 4px; }
+input, select, textarea {
+  width: 100%; font: inherit; padding: 9px 11px; min-height: 42px;
+  border: 1px solid var(--borde); border-radius: 10px; background: #fff; color: var(--texto);
+}
+input:focus, select:focus, textarea:focus, button:focus-visible {
+  outline: 3px solid rgba(242, 165, 22, 0.55); outline-offset: 1px;
+}
+textarea { resize: vertical; min-height: 60px; }
+.campo { margin-bottom: 12px; }
+.fila-campos { display: grid; gap: 12px; grid-template-columns: 1fr; }
+@media (min-width: 640px) { .fila-campos { grid-template-columns: repeat(2, 1fr); } }
+.casilla { display: flex; align-items: center; gap: 8px; font-weight: 500; }
+.casilla input { width: 20px; min-height: 20px; height: 20px; }
+
+/* ---------- Etiquetas de estado ---------- */
+.etiqueta {
+  display: inline-block; font-size: 0.78rem; font-weight: 700; padding: 2px 9px;
+  border-radius: 999px; background: var(--gris-fondo); color: var(--texto-suave); white-space: nowrap;
+}
+.etiqueta.pendiente { background: var(--amarillo-fondo); color: #8a5a00; }
+.etiqueta.en_preparacion { background: var(--azul-fondo); color: var(--azul); }
+.etiqueta.listo { background: var(--verde-fondo); color: var(--verde); }
+.etiqueta.entregado { background: var(--gris-fondo); color: var(--texto-suave); }
+.etiqueta.cancelado { background: #fbe4e1; color: var(--rojo-oscuro); text-decoration: line-through; }
+.etiqueta.pagado { background: var(--verde); color: #fff; }
+.etiqueta.agotado { background: #fbe4e1; color: var(--rojo-oscuro); }
+
+/* ---------- Tablas ---------- */
+.tabla-envoltura { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--borde); vertical-align: top; }
+th { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--texto-suave); }
+td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+table.ancha { min-width: 600px; }
+table.ancha td { white-space: nowrap; }
+
+/* ---------- Mensajes ---------- */
+.vacio { color: var(--texto-suave); text-align: center; padding: 24px 8px; }
+.error-formulario { color: var(--rojo-oscuro); font-weight: 600; min-height: 1.4em; margin: 6px 0; }
+#avisos {
+  position: fixed; left: 16px; right: 16px; bottom: 16px; z-index: 50;
+  display: flex; flex-direction: column; align-items: center; gap: 8px; pointer-events: none;
+}
+.aviso {
+  max-width: 480px; width: 100%; padding: 12px 16px; border-radius: 10px;
+  background: var(--texto); color: #fff; box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+  font-weight: 600; pointer-events: auto;
+}
+.aviso.error { background: var(--rojo-oscuro); }
+.aviso.exito { background: var(--verde); }
+
+/* ---------- Menú público ---------- */
+.portada { background: var(--texto); color: #fff; padding: 28px 16px; text-align: center; }
+.portada h1 { font-size: 1.7rem; margin-bottom: 4px; }
+.portada h1 span { color: var(--mostaza); }
+.portada p { margin: 0; opacity: 0.85; }
+.chips {
+  position: sticky; top: 52px; z-index: 5; display: flex; gap: 8px; overflow-x: auto;
+  padding: 10px 16px; background: var(--fondo); border-bottom: 1px solid var(--borde);
+}
+.chips a {
+  flex: 0 0 auto; text-decoration: none; color: var(--texto); font-weight: 600; font-size: 0.9rem;
+  padding: 6px 14px; border-radius: 999px; background: var(--superficie); border: 1px solid var(--borde);
+}
+.categoria { margin: 8px 0 28px; scroll-margin-top: 110px; }
+.producto { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; }
+.producto .nombre { font-weight: 700; }
+.producto .descripcion { color: var(--texto-suave); font-size: 0.92rem; margin-top: 2px; }
+.producto .precio { font-weight: 800; color: var(--rojo); white-space: nowrap; }
+.producto.no-disponible .nombre, .producto.no-disponible .precio { color: var(--texto-suave); }
+
+/* ---------- Ingreso ---------- */
+.caja-ingreso { max-width: 380px; margin: 40px auto; }
+
+/* ---------- Mesero: selección de productos ---------- */
+.linea-producto {
+  display: grid; grid-template-columns: 1fr auto; gap: 6px 10px; align-items: center;
+  padding: 10px 0; border-bottom: 1px solid var(--borde);
+}
+.linea-producto:last-child { border-bottom: 0; }
+.contador { display: flex; align-items: center; gap: 6px; }
+.contador button {
+  width: 38px; height: 38px; border-radius: 50%; border: 1px solid var(--borde);
+  background: var(--superficie); font-size: 1.25rem; font-weight: 700; cursor: pointer; color: var(--texto);
+}
+.contador .cantidad { min-width: 24px; text-align: center; font-weight: 700; }
+.linea-producto .nota { grid-column: 1 / -1; }
+.linea-producto .nota input { min-height: 36px; padding: 6px 10px; font-size: 0.92rem; }
+.resumen-pedido {
+  position: sticky; bottom: 0; z-index: 6; margin: 16px -16px -16px; padding: 12px 16px;
+  background: var(--superficie); border-top: 2px solid var(--rojo);
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+}
+.resumen-pedido .total { font-size: 1.2rem; font-weight: 800; }
+
+/* ---------- Pedidos y cocina ---------- */
+.pedido-cabecera { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+.pedido-cabecera .titulo { font-weight: 800; font-size: 1.05rem; }
+.pedido-meta { color: var(--texto-suave); font-size: 0.88rem; }
+.lista-productos { white-space: pre-line; margin: 10px 0; font-size: 1.05rem; line-height: 1.6; }
+.observacion { background: var(--amarillo-fondo); border-radius: 8px; padding: 6px 10px; font-size: 0.92rem; margin: 6px 0; }
+.tarjeta.urgente { border-left: 6px solid var(--rojo); }
+.tarjeta.en-curso { border-left: 6px solid var(--azul); }
+.tarjeta.terminado { border-left: 6px solid var(--verde); opacity: 0.85; }
+.detalle-pedido { margin-top: 8px; font-size: 0.92rem; }
+.detalle-pedido td { padding: 4px 6px; }
+
+/* ---------- Ventas ---------- */
+.indicadores { display: grid; gap: 12px; grid-template-columns: repeat(2, 1fr); margin-bottom: 16px; }
+.indicador .valor { font-size: 1.4rem; font-weight: 800; }
+.indicador .rotulo { color: var(--texto-suave); font-size: 0.85rem; }
+.barra-dato { height: 8px; border-radius: 4px; background: var(--mostaza); min-width: 2px; }
+
+/* ---------- Diálogo (formulario de producto) ---------- */
+dialog {
+  width: min(520px, calc(100% - 32px)); border: 0; border-radius: var(--radio);
+  padding: 20px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+dialog::backdrop { background: rgba(30, 20, 10, 0.5); }
+
+.seccion { margin-bottom: 24px; }
+.encabezado-seccion { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+.encabezado-seccion h2 { margin: 0; }
+.texto-suave { color: var(--texto-suave); }

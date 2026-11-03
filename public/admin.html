@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Administración · Fercho</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/css/estilos.css">
+</head>
+<body>
+  <header class="barra">
+    <a class="marca" href="/">Hamburguesas y Pinchos <span>Fercho</span></a>
+    <nav class="nav" id="nav"></nav>
+  </header>
+
+  <main class="contenedor">
+    <div class="pestanas" role="tablist">
+      <button type="button" role="tab" data-pestana="seccion-ventas" aria-selected="true">Ventas</button>
+      <button type="button" role="tab" data-pestana="seccion-productos" aria-selected="false">Productos</button>
+    </div>
+
+    <!-- ===== Ventas por fechas ===== -->
+    <section id="seccion-ventas">
+      <form class="tarjeta seccion" id="formulario-ventas">
+        <div class="fila-campos">
+          <div class="campo">
+            <label for="desde">Desde</label>
+            <input type="date" id="desde" required>
+          </div>
+          <div class="campo">
+            <label for="hasta">Hasta</label>
+            <input type="date" id="hasta" required>
+          </div>
+        </div>
+        <div class="acciones">
+          <button type="submit" class="boton primario">Consultar</button>
+          <button type="button" class="boton pequeno" data-rango="hoy">Hoy</button>
+          <button type="button" class="boton pequeno" data-rango="7">Últimos 7 días</button>
+          <button type="button" class="boton pequeno" data-rango="mes">Este mes</button>
+        </div>
+      </form>
+      <div id="resultado-ventas"></div>
+    </section>
+
+    <!-- ===== Productos ===== -->
+    <section id="seccion-productos" hidden>
+      <div class="encabezado-seccion">
+        <h2>Productos</h2>
+        <button type="button" class="boton primario" id="boton-nuevo">+ Nuevo producto</button>
+      </div>
+      <div class="tarjeta tabla-envoltura">
+        <table>
+          <thead>
+            <tr>
+              <th>Producto</th>
+              <th>Categoría</th>
+              <th class="num">Precio</th>
+              <th>Estado</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="tabla-productos"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <!-- Formulario de producto (crear o editar) -->
+  <dialog id="dialogo-producto">
+    <form id="formulario-producto" novalidate>
+      <h2 id="producto-titulo">Nuevo producto</h2>
+      <div class="campo">
+        <label for="p-nombre">Nombre</label>
+        <input id="p-nombre" maxlength="80" required>
+      </div>
+      <div class="campo">
+        <label for="p-descripcion">Descripción (opcional)</label>
+        <textarea id="p-descripcion" maxlength="300"></textarea>
+      </div>
+      <div class="fila-campos">
+        <div class="campo">
+          <label for="p-categoria">Categoría</label>
+          <select id="p-categoria" required></select>
+        </div>
+        <div class="campo">
+          <label for="p-precio">Precio (pesos)</label>
+          <input id="p-precio" type="number" min="1" step="100" inputmode="numeric" required>
+        </div>
+      </div>
+      <div class="campo">
+        <label class="casilla"><input type="checkbox" id="p-disponible"> Disponible para pedir</label>
+        <label class="casilla"><input type="checkbox" id="p-activo"> Visible en el menú (desmarcar para retirarlo)</label>
+      </div>
+      <p class="error-formulario" id="producto-error" role="alert"></p>
+      <div class="acciones">
+        <button type="submit" class="boton primario">Guardar</button>
+        <button type="button" class="boton" id="boton-cerrar-producto">Cancelar</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="/js/comun.js"></script>
+  <script src="/js/admin.js"></script>
+</body>
+</html>

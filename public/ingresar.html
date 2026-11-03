@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ingreso del personal · Fercho</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/css/estilos.css">
+</head>
+<body>
+  <header class="barra">
+    <a class="marca" href="/">Hamburguesas y Pinchos <span>Fercho</span></a>
+    <nav class="nav"><a href="/">Ver menú</a></nav>
+  </header>
+
+  <main class="contenedor">
+    <form class="tarjeta caja-ingreso" id="formulario" novalidate>
+      <h1>Ingreso del personal</h1>
+      <div class="campo">
+        <label for="usuario">Usuario</label>
+        <input id="usuario" name="usuario" autocomplete="username" autocapitalize="none" required>
+      </div>
+      <div class="campo">
+        <label for="contrasena">Contraseña</label>
+        <input id="contrasena" name="contrasena" type="password" autocomplete="current-password" required>
+      </div>
+      <p class="error-formulario" id="error" role="alert"></p>
+      <button class="boton primario bloque" type="submit" id="boton">Ingresar</button>
+    </form>
+  </main>
+
+  <script src="/js/comun.js"></script>
+  <script>
+    // A dónde ir después de ingresar: la página que pidió el ingreso (solo
+    // rutas internas que empiezan por "/") o la página propia del rol.
+    function destino(rol) {
+      const volver = new URLSearchParams(location.search).get('volver');
+      if (volver && volver.startsWith('/') && !volver.startsWith('//') && volver !== '/ingresar.html') {
+        return volver;
+      }
+      return INICIO_POR_ROL[rol] || '/';
+    }
+
+    // Si ya hay una sesión activa, no pedir ingreso de nuevo.
+    api('GET', '/api/auth/yo').then((u) => { location.href = destino(u.rol); }).catch(() => {});
+
+    document.getElementById('formulario').addEventListener('submit', async (evento) => {
+      evento.preventDefault(); // evita que el navegador recargue la página
+      const error = document.getElementById('error');
+      const boton = document.getElementById('boton');
+      const usuario = document.getElementById('usuario').value.trim();
+      const contrasena = document.getElementById('contrasena').value;
+
+      if (!usuario || !contrasena) {
+        error.textContent = 'Escriba el usuario y la contraseña.';
+        return;
+      }
+      error.textContent = '';
+      boton.disabled = true;
+      boton.textContent = 'Ingresando…';
+      try {
+        const datos = await api('POST', '/api/auth/ingresar', { usuario, contrasena });
+        location.href = destino(datos.rol);
+      } catch (e) {
+        error.textContent = e.message;
+        boton.disabled = false;
+        boton.textContent = 'Ingresar';
+      }
+    });
+  </script>
+</body>
+</html>

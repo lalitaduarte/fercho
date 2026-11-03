@@ -1,0 +1,22 @@
+{
+  "name": "fercho",
+  "version": "1.0.0",
+  "description": "Sistema de pedidos y ventas de Hamburguesas y Pinchos Fercho (Equipo 1, D194 / B194 - UTS)",
+  "main": "src/server.js",
+  "private": true,
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "probar": "node scripts/probar-api.js"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cookie-parser": "^1.4.7",
+    "express": "^4.22.3",
+    "jsonwebtoken": "^9.0.3",
+    "pg": "^8.23.1"
+  }
+}

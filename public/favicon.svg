@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Ícono de la pestaña: hamburguesa simple -->
+  <rect width="64" height="64" rx="14" fill="#b8321f"/>
+  <path d="M12 30c0-10 9-16 20-16s20 6 20 16z" fill="#f2a516"/>
+  <rect x="10" y="33" width="44" height="6" rx="3" fill="#5b3a1e"/>
+  <path d="M12 43h40v3c0 4-3 6-7 6H19c-4 0-7-2-7-6z" fill="#f2a516"/>
+</svg>
