@@ -153,10 +153,16 @@ Archivos en `public/` (HTML, CSS y JavaScript, sin frameworks):
 - ✅ Código en GitHub (privado): https://github.com/lalitaduarte/fercho. Verificado: GitHub tiene
   la misma versión que el equipo local y no contiene `.env`. Se agregaron `.gitattributes`
   (finales de línea LF) y `.node-version` (Node 22).
-- ⏳ Crear el servicio web en Render (paso manual).
+- ✅ Servicio web en Render (Free, Virginia): **https://fercho-qgmq.onrender.com**
+  Verificado: `/api/salud` ok con Neon, menú completo, HTTP redirige a HTTPS, cookie `HttpOnly; Secure`,
+  y sin sesión no se ven los pedidos. Se publica solo con cada cambio subido a GitHub (Auto-Deploy).
+- ✅ Nueva pantalla **Cambiar contraseña** (`contrasena.html`, `PATCH /api/auth/contrasena`). Se abre
+  pulsando el nombre del usuario en el menú superior. Exige la contraseña actual y un mínimo de 8 caracteres.
+  Pruebas: API 36/36 y interfaz 26/26.
+- ⏳ Cambiar las contraseñas de admin, mesero1 y cocina1 en la aplicación publicada (paso manual).
 - Configurar en el servidor las variables `DATABASE_URL`, `JWT_SECRET` y `NODE_ENV=production`.
-- **Cambiar las contraseñas de los usuarios de prueba en la base de Neon ANTES de compartir el enlace.**
-  Las contraseñas de prueba aparecen en este archivo y en el script 05, y el código estará en GitHub.
+- **Cambiar las contraseñas de los usuarios de prueba en la aplicación publicada ANTES de compartir el enlace.**
+  Las contraseñas de prueba aparecen en este archivo y en el script 05, y el código está en GitHub.
 - Publicar el backend y el frontend con enlace HTTPS.
 - Comprobar que los datos persisten después de reiniciar el servicio.
 

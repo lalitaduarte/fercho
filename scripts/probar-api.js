@@ -155,6 +155,21 @@ async function probar() {
   r = await mesero('POST', '/api/productos', { nombre: `${MARCA} Y`, precio: 1000, id_categoria: idCategoria });
   comprobar(r.estado === 403, 'El mesero no puede crear productos (403)');
 
+  // --- Cambio de contraseña (al final se deja la original) ---------
+  r = await mesero('PATCH', '/api/auth/contrasena', { actual: 'equivocada', nueva: 'OtraClave2026' });
+  comprobar(r.estado === 400, 'Cambio de contraseña con la actual equivocada rechazado (400)');
+  r = await mesero('PATCH', '/api/auth/contrasena', { actual: 'Mesero2026*', nueva: 'corta' });
+  comprobar(r.estado === 400, 'Contraseña nueva de menos de 8 caracteres rechazada (400)');
+  r = await mesero('PATCH', '/api/auth/contrasena', { actual: 'Mesero2026*', nueva: 'OtraClave2026' });
+  comprobar(r.estado === 200, 'Mesero cambia su contraseña');
+  const otro = crearCliente();
+  r = await otro('POST', '/api/auth/ingresar', { usuario: 'mesero1', contrasena: 'Mesero2026*' });
+  comprobar(r.estado === 401, 'La contraseña anterior ya no sirve');
+  r = await otro('POST', '/api/auth/ingresar', { usuario: 'mesero1', contrasena: 'OtraClave2026' });
+  comprobar(r.estado === 200, 'La contraseña nueva sí sirve');
+  r = await otro('PATCH', '/api/auth/contrasena', { actual: 'OtraClave2026', nueva: 'Mesero2026*' });
+  comprobar(r.estado === 200, 'Se restaura la contraseña de prueba');
+
   r = await mesero('POST', '/api/auth/salir');
   r = await mesero('GET', '/api/pedidos');
   comprobar(r.estado === 401, 'Después de salir, la sesión queda cerrada');

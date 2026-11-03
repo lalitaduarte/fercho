@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cambiar contraseña · Fercho</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/css/estilos.css">
+</head>
+<body>
+  <header class="barra">
+    <a class="marca" href="/">Hamburguesas y Pinchos <span>Fercho</span></a>
+    <nav class="nav" id="nav"></nav>
+  </header>
+
+  <main class="contenedor">
+    <form class="tarjeta caja-ingreso" id="formulario" novalidate>
+      <h1>Cambiar contraseña</h1>
+      <p class="texto-suave" id="quien"></p>
+      <div class="campo">
+        <label for="actual">Contraseña actual</label>
+        <input id="actual" type="password" autocomplete="current-password" required>
+      </div>
+      <div class="campo">
+        <label for="nueva">Nueva contraseña (mínimo 8 caracteres)</label>
+        <input id="nueva" type="password" autocomplete="new-password" minlength="8" maxlength="72" required>
+      </div>
+      <div class="campo">
+        <label for="confirmar">Repita la nueva contraseña</label>
+        <input id="confirmar" type="password" autocomplete="new-password" required>
+      </div>
+      <p class="error-formulario" id="error" role="alert"></p>
+      <button class="boton primario bloque" type="submit" id="boton">Guardar contraseña</button>
+    </form>
+  </main>
+
+  <script src="/js/comun.js"></script>
+  <script>
+    (async function iniciar() {
+      const usuario = await exigirSesion(['administrador', 'mesero', 'cocina']);
+      document.getElementById('quien').textContent = `Usuario: ${usuario.nombre} (${usuario.rol})`;
+
+      document.getElementById('formulario').addEventListener('submit', async (evento) => {
+        evento.preventDefault();
+        const error = document.getElementById('error');
+        const boton = document.getElementById('boton');
+        const actual = document.getElementById('actual').value;
+        const nueva = document.getElementById('nueva').value;
+        const confirmar = document.getElementById('confirmar').value;
+
+        if (!actual || !nueva) { error.textContent = 'Complete todos los campos.'; return; }
+        if (nueva.length < 8) { error.textContent = 'La nueva contraseña debe tener al menos 8 caracteres.'; return; }
+        if (nueva !== confirmar) { error.textContent = 'Las dos contraseñas nuevas no coinciden.'; return; }
+
+        error.textContent = '';
+        boton.disabled = true;
+        try {
+          await api('PATCH', '/api/auth/contrasena', { actual, nueva });
+          document.getElementById('formulario').reset();
+          aviso('Contraseña cambiada. Úsela la próxima vez que ingrese.', 'exito');
+          setTimeout(() => { location.href = INICIO_POR_ROL[usuario.rol]; }, 1800);
+        } catch (e) {
+          error.textContent = e.message;
+          boton.disabled = false;
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

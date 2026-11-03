@@ -79,4 +79,27 @@ router.get('/yo', requiereSesion, (req, res) => {
   res.json({ id, nombre, rol });
 });
 
+// Cambiar la contraseña propia: exige la contraseña actual.
+//   PATCH /api/auth/contrasena   { actual, nueva }
+router.patch('/contrasena', requiereSesion, asincrono(async (req, res) => {
+  const actual = String(req.body?.actual || '');
+  const nueva = String(req.body?.nueva || '');
+
+  if (nueva.length < 8) throw new ErrorApp(400, 'La nueva contraseña debe tener al menos 8 caracteres.');
+  if (nueva.length > 72) throw new ErrorApp(400, 'La nueva contraseña admite máximo 72 caracteres.'); // límite de bcrypt
+  if (nueva === actual) throw new ErrorApp(400, 'La nueva contraseña debe ser distinta de la actual.');
+
+  const { rows } = await db.query(
+    'SELECT contrasena_hash FROM usuarios WHERE id_usuario = $1 AND activo', [req.usuario.id]
+  );
+  if (rows.length === 0 || !(await bcrypt.compare(actual, rows[0].contrasena_hash))) {
+    throw new ErrorApp(400, 'La contraseña actual no es correcta.');
+  }
+
+  // bcrypt.hash genera el hash con un "salt" aleatorio (10 = costo del cifrado).
+  const hash = await bcrypt.hash(nueva, 10);
+  await db.query('UPDATE usuarios SET contrasena_hash = $1 WHERE id_usuario = $2', [hash, req.usuario.id]);
+  res.json({ ok: true });
+}));
+
 module.exports = router;

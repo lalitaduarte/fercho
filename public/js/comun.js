@@ -134,7 +134,8 @@ function pintarNavegacion(usuario) {
     .join('');
   nav.innerHTML = `
     ${enlaces}
-    <span class="usuario">${esc(usuario.nombre)}</span>
+    <a href="/contrasena.html" class="${location.pathname === '/contrasena.html' ? 'activo' : ''}"
+       title="Cambiar contraseña">${esc(usuario.nombre)}</a>
     <button type="button" id="boton-salir">Salir</button>`;
   document.getElementById('boton-salir').addEventListener('click', async () => {
     await api('POST', '/api/auth/salir').catch(() => {});
